@@ -7,10 +7,10 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 <div class="ticker-wrap relative z-[9] bg-[#0F0F0D] text-paper border-y border-gold/20 overflow-hidden">
-  <div class="ticker-label absolute left-0 top-0 bottom-0 bg-red text-paper font-sans font-bold text-[10px] tracking-[0.15em] uppercase px-3.5 flex items-center z-[2]">
+  <div class="ticker-label absolute left-0 top-0 bottom-0 bg-red text-paper font-sans font-bold text-[9px] sm:text-[10px] tracking-[0.15em] uppercase px-2 sm:px-3.5 flex items-center z-[2] whitespace-nowrap">
     {t('ticker.label')}
   </div>
-  <div class="ticker-track font-mono text-[13px] py-3 pl-[110px] pr-6" id="tickerTrack"></div>
+  <div class="ticker-track font-mono text-[11px] sm:text-[13px] py-2.5 sm:py-3 pl-[80px] sm:pl-[110px] pr-4" id="tickerTrack"></div>
 </div>
 
 <script>
