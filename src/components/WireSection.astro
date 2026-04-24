@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '@i18n/ui';
+import { useTranslations, localePath } from '@i18n/utils';
+
+interface Props { lang: Lang; wires: CollectionEntry<'wires'>[]; }
+const { lang, wires } = Astro.props;
+const t = useTranslations(lang);
+const relTime = (d: Date) => {
+  const diff = (Date.now() - d.getTime()) / 3600000;
+  if (diff < 1) return `${Math.round(diff * 60)} min`;
+  return `${Math.round(diff)} h`;
+};
+---
+<section class="bg-paper-dark py-10 border-y border-rule my-10">
+  <div class="max-w-container mx-auto px-6">
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+      <h2 class="font-display font-bold text-2xl tracking-[-0.015em]">{t('wire.title')}</h2>
+      <div class="flex gap-2 items-center font-sans text-[10px] font-bold tracking-[0.15em] uppercase">
+        <span class="px-2.5 py-1 border border-ink bg-paper-light">AFP</span>
+        <span class="px-2.5 py-1 border border-ink bg-paper-light">AP</span>
+        <span class="px-2.5 py-1 border border-ink bg-paper-light">REUTERS</span>
+        <span class="px-2.5 py-1 border border-ink bg-paper-light">EFE</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {wires.slice(0, 4).map(w => (
+        <a href={localePath(lang, `/wire/${w.id.replace(/\.md$/, '')}`)}
+           class="block bg-paper-light border border-rule p-4.5 rounded-sm transition hover:-translate-y-0.5 hover:shadow-lg group"
+           style="padding: 18px;">
+          <div class="font-mono text-[10px] font-medium text-red tracking-[0.08em] mb-2 flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 bg-red rounded-full"></span>
+            {w.data.source.toUpperCase()}
+          </div>
+          <h4 class="font-display font-medium text-[17px] leading-[1.2] mb-2 group-hover:text-red transition"
+              style="font-variation-settings: 'opsz' 40;">
+            {w.data.title}
+          </h4>
+          {w.data.deck && <p class="text-[13px] text-ink/80 leading-[1.45]">{w.data.deck}</p>}
+          <div class="font-mono text-[10px] text-ink/70 mt-3 opacity-70">{relTime(w.data.pubDate)}</div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

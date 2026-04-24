@@ -1,0 +1,99 @@
+---
+import type { Lang } from '@i18n/ui';
+import { useTranslations } from '@i18n/utils';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<div class="ticker-wrap relative z-[9] bg-[#0F0F0D] text-paper border-y border-gold/20 overflow-hidden">
+  <div class="ticker-label absolute left-0 top-0 bottom-0 bg-red text-paper font-sans font-bold text-[10px] tracking-[0.15em] uppercase px-3.5 flex items-center z-[2]">
+    {t('ticker.label')}
+  </div>
+  <div class="ticker-track font-mono text-[13px] py-3 pl-[110px] pr-6" id="tickerTrack"></div>
+</div>
+
+<script>
+  // Seed data — se reemplaza con datos reales vía API en vivo
+  const SEED = [
+    { symbol: 'S&P 500',   price: 5247.88,   delta: 0.42,  dec: 2 },
+    { symbol: 'DOW JONES', price: 39208.15,  delta: -0.18, dec: 2 },
+    { symbol: 'NASDAQ',    price: 16712.44,  delta: 0.67,  dec: 2 },
+    { symbol: 'FTSE 100',  price: 8134.22,   delta: 0.11,  dec: 2 },
+    { symbol: 'DAX',       price: 18205.67,  delta: -0.24, dec: 2 },
+    { symbol: 'NIKKEI 225',price: 38743.08,  delta: 0.89,  dec: 2 },
+    { symbol: 'HANG SENG', price: 17218.55,  delta: 1.42,  dec: 2 },
+    { symbol: 'SHANGHAI',  price: 3048.71,   delta: 0.33,  dec: 2 },
+    { symbol: 'USD/EUR',   price: 0.9342,    delta: -0.08, dec: 4 },
+    { symbol: 'USD/JPY',   price: 157.82,    delta: 0.22,  dec: 2 },
+    { symbol: 'USD/COP',   price: 3894.50,   delta: 0.45,  dec: 2 },
+    { symbol: 'USD/MXN',   price: 17.24,     delta: -0.12, dec: 2 },
+    { symbol: 'USD/ARS',   price: 883.25,    delta: 0.08,  dec: 2 },
+    { symbol: 'BTC',       price: 67184.22,  delta: 2.14,  dec: 2 },
+    { symbol: 'ETH',       price: 3421.55,   delta: 1.88,  dec: 2 },
+    { symbol: 'GOLD',      price: 2332.10,   delta: 0.54,  dec: 2 },
+    { symbol: 'BRENT',     price: 87.43,     delta: -0.67, dec: 2 },
+  ];
+
+  const fmt = (n, d) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function render(data) {
+    const track = document.getElementById('tickerTrack');
+    const items = [...data, ...data]; // loop
+    track.innerHTML = items.map(t => `
+      <span class="inline-flex items-center gap-2.5">
+        <span class="font-medium tracking-[0.05em]">${t.symbol}</span>
+        <span class="opacity-90">${fmt(t.price, t.dec)}</span>
+        <span class="text-[12px] px-1.5 py-0.5 rounded-sm ${t.delta >= 0 ? 'text-[#3BD678] bg-[#0A7D3B]/15' : 'text-[#FF5A4A] bg-[#C8102E]/15'}">
+          ${t.delta >= 0 ? '▲' : '▼'} ${t.delta >= 0 ? '+' : ''}${t.delta.toFixed(2)}%
+        </span>
+      </span>
+    `).join('');
+  }
+  render(SEED);
+
+  // Conexión real con Finnhub (cliente). Define PUBLIC_FINNHUB_KEY en .env
+  // @ts-ignore
+  const KEY = import.meta.env.PUBLIC_FINNHUB_KEY;
+  async function refreshLive() {
+    if (!KEY) return; // sin key, se queda con el seed + jitter
+    try {
+      // Finnhub: /quote?symbol=^GSPC — mapear símbolos de Finnhub a los nuestros
+      const SYMS = {
+        'S&P 500': '^GSPC', 'DOW JONES': '^DJI', 'NASDAQ': '^IXIC',
+        'FTSE 100': '^FTSE', 'DAX': '^GDAXI', 'NIKKEI 225': '^N225',
+        'HANG SENG': '^HSI', 'SHANGHAI': '000001.SS',
+        'USD/EUR': 'OANDA:EUR_USD', 'USD/JPY': 'OANDA:USD_JPY',
+        'BTC': 'BINANCE:BTCUSDT', 'ETH': 'BINANCE:ETHUSDT',
+      };
+      const updated = await Promise.all(SEED.map(async (t) => {
+        const sym = SYMS[t.symbol];
+        if (!sym) return t;
+        const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(sym)}&token=${KEY}`);
+        if (!r.ok) return t;
+        const j = await r.json();
+        if (typeof j.c === 'number' && j.c > 0) {
+          return { ...t, price: j.c, delta: j.dp ?? t.delta };
+        }
+        return t;
+      }));
+      render(updated);
+    } catch (_) { /* fail silently, keep current values */ }
+  }
+
+  // Jitter simulation cuando no hay API key
+  setInterval(() => {
+    if (!KEY) {
+      SEED.forEach(t => {
+        const jitter = (Math.random() - 0.5) * 0.3;
+        t.delta = +(t.delta + jitter).toFixed(2);
+        t.price = +(t.price * (1 + jitter/1000)).toFixed(t.dec);
+      });
+      render(SEED);
+    } else {
+      refreshLive();
+    }
+  }, 60000); // cada 60 s
+
+  if (KEY) refreshLive();
+</script>

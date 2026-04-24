@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import TopBar from '@components/TopBar.astro';
+import Ticker from '@components/Ticker.astro';
+import Masthead from '@components/Masthead.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+
+const lang = 'es';
+---
+<BaseLayout title="Buscar · Meridiano" lang={lang} description="Busca en el archivo completo de Meridiano.">
+  <TopBar lang={lang} />
+  <Ticker lang={lang} />
+  <Masthead lang={lang} />
+  <Nav lang={lang} />
+
+  <section class="max-w-[780px] mx-auto px-6 py-12 relative z-[2]">
+    <h1 class="font-display font-black text-[clamp(36px,5vw,56px)] tracking-[-0.025em] mb-6">Buscar</h1>
+    <div id="search"></div>
+  </section>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-ui.js" is:inline></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', () => {
+    // @ts-ignore
+    new PagefindUI({ element: '#search', showSubResults: true, translations: { placeholder: 'Buscar noticias, autores, temas...' } });
+  });
+</script>

@@ -1,0 +1,88 @@
+# Decap CMS — panel editorial para Meridiano
+# Se accede en /admin con autenticación GitHub OAuth.
+
+backend:
+  name: github
+  repo: coysegur-beep/atlas    # <-- Cambia por el repo real de Meridiano
+  branch: main
+  base_url: https://api.netlify.com   # Opción: usa oauth.decapbridge.com o tu propio OAuth proxy en Lambda
+  auth_endpoint: auth
+
+# Flujo editorial: las ediciones crean PRs, no empujan directo a main
+publish_mode: editorial_workflow
+
+media_folder: public/uploads
+public_folder: /uploads
+
+# Localización del UI (ES)
+locale: es
+
+i18n:
+  structure: multiple_folders
+  locales: [es, en]
+  default_locale: es
+
+collections:
+  - name: news
+    label: Noticias
+    label_singular: Nota
+    folder: src/content/news
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    fields:
+      - { label: 'Idioma', name: lang, widget: select, options: [es, en], default: es, i18n: duplicate }
+      - { label: 'Título', name: title, widget: string, i18n: true }
+      - { label: 'Bajada / Deck', name: deck, widget: string, required: false, i18n: true }
+      - { label: 'Fecha de publicación', name: pubDate, widget: datetime, i18n: duplicate }
+      - { label: 'Actualizado', name: updatedDate, widget: datetime, required: false, i18n: duplicate }
+      - { label: 'Autor', name: author, widget: string, i18n: true }
+      - label: 'Sección'
+        name: section
+        widget: select
+        options:
+          - { label: 'Mundo', value: mundo }
+          - { label: 'Economía', value: economia }
+          - { label: 'Política', value: politica }
+          - { label: 'Cultura', value: cultura }
+          - { label: 'Tecnología', value: tecnologia }
+          - { label: 'Ciencia', value: ciencia }
+          - { label: 'Deportes', value: deportes }
+          - { label: 'Negocios', value: negocios }
+          - { label: 'Salud', value: salud }
+          - { label: 'Medio ambiente', value: medioambiente }
+        i18n: duplicate
+      - { label: 'Imagen principal', name: heroImage, widget: image, required: false, i18n: duplicate }
+      - { label: 'Texto alternativo imagen', name: heroAlt, widget: string, required: false, i18n: true }
+      - { label: 'Destacada en portada', name: featured, widget: boolean, default: false, i18n: duplicate }
+      - { label: 'Borrador', name: draft, widget: boolean, default: false, i18n: duplicate }
+      - label: 'Fuente'
+        name: source
+        widget: select
+        options: [original, afp, ap, reuters, efe]
+        default: original
+        i18n: duplicate
+      - { label: 'Etiquetas', name: tags, widget: list, default: [], i18n: duplicate }
+      - { label: 'Cuerpo', name: body, widget: markdown, i18n: true }
+
+  - name: opinion
+    label: Opinión
+    label_singular: Columna
+    folder: src/content/opinion
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    fields:
+      - { label: 'Idioma', name: lang, widget: select, options: [es, en], default: es, i18n: duplicate }
+      - { label: 'Título', name: title, widget: string, i18n: true }
+      - { label: 'Bajada', name: deck, widget: string, required: false, i18n: true }
+      - { label: 'Fecha', name: pubDate, widget: datetime, i18n: duplicate }
+      - { label: 'Autor', name: author, widget: string, i18n: true }
+      - { label: 'Biografía', name: authorBio, widget: text, required: false, i18n: true }
+      - { label: 'Sección', name: section, widget: select, options: [opinion], default: opinion, i18n: duplicate }
+      - { label: 'Foto autor', name: heroImage, widget: image, required: false, i18n: duplicate }
+      - { label: 'Aprobada', name: approved, widget: boolean, default: false, i18n: duplicate }
+      - { label: 'Borrador', name: draft, widget: boolean, default: false, i18n: duplicate }
+      - { label: 'Fecha de envío', name: submittedAt, widget: datetime, required: false, i18n: duplicate }
+      - { label: 'Fuente', name: source, widget: hidden, default: original, i18n: duplicate }
+      - { label: 'Cuerpo', name: body, widget: markdown, i18n: true }

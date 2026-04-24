@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import TopBar from '@components/TopBar.astro';
+import Ticker from '@components/Ticker.astro';
+import Masthead from '@components/Masthead.astro';
+import Nav from '@components/Nav.astro';
+import Hero from '@components/Hero.astro';
+import WireSection from '@components/WireSection.astro';
+import OpinionGrid from '@components/OpinionGrid.astro';
+import LatestGrid from '@components/LatestGrid.astro';
+import SubmitForm from '@components/SubmitForm.astro';
+import Footer from '@components/Footer.astro';
+
+const lang = 'es';
+
+const allNews = (await getCollection('news', ({ data }) => !data.draft && data.lang === lang))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const allWires = (await getCollection('wires', ({ data }) => !data.draft && data.lang === lang))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const allOpinion = (await getCollection('opinion', ({ data }) => !data.draft && data.approved && data.lang === lang))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const featured = allNews.find(n => n.data.featured) || allNews[0];
+const side = allNews.filter(n => n !== featured).slice(0, 3);
+const latest = allNews.filter(n => n !== featured && !side.includes(n)).slice(0, 8);
+---
+<BaseLayout title="Meridiano — Noticias sin fronteras" lang={lang}>
+  <TopBar lang={lang} />
+  <Ticker lang={lang} />
+  <Masthead lang={lang} />
+  <Nav lang={lang} current="home" />
+  {featured && <Hero lang={lang} featured={featured} side={side} />}
+  <WireSection lang={lang} wires={allWires} />
+  <OpinionGrid lang={lang} columns={allOpinion} />
+  <LatestGrid lang={lang} items={latest} />
+  <SubmitForm lang={lang} />
+  <Footer lang={lang} />
+</BaseLayout>

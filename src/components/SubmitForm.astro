@@ -1,0 +1,148 @@
+---
+import type { Lang } from '@i18n/ui';
+import { useTranslations } from '@i18n/utils';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// El endpoint lo defines en .env como PUBLIC_SUBMIT_ENDPOINT (API Gateway URL)
+---
+<section class="bg-ink text-paper py-20 relative overflow-hidden" id="enviar-columna">
+  <div class="absolute inset-0 pointer-events-none"
+       style="background:
+         radial-gradient(ellipse at top left, rgba(184,147,79,0.08) 0%, transparent 50%),
+         radial-gradient(ellipse at bottom right, rgba(200,16,46,0.08) 0%, transparent 50%);"></div>
+
+  <div class="max-w-[960px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-15 relative" style="gap: 60px;">
+    <div>
+      <div class="font-sans text-[11px] font-bold tracking-[0.18em] uppercase text-gold mb-4">{t('submit.eyebrow')}</div>
+      <h2 class="font-display font-light text-[clamp(34px,4vw,48px)] leading-[1.05] tracking-[-0.025em] mb-5"
+          style="font-variation-settings: 'opsz' 144;" set:html={t('submit.headline').replace(/<em>/g, '<em class="italic text-gold font-normal">')}></h2>
+      <p class="text-[15px] leading-[1.6] opacity-80 mb-5">{t('submit.body')}</p>
+      <div class="font-sans text-[12px] opacity-65 leading-[1.8]">
+        <span class="text-gold font-semibold tracking-[0.05em]">{t('submit.step1')}</span><br />
+        <span class="text-gold font-semibold tracking-[0.05em]">{t('submit.step2')}</span><br />
+        <span class="text-gold font-semibold tracking-[0.05em]">{t('submit.step3')}</span>
+      </div>
+    </div>
+
+    <form id="columnForm"
+          class="grid gap-4 bg-paper/[0.04] p-8 border border-paper/15 rounded-sm backdrop-blur-sm"
+          novalidate>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label class="flex flex-col gap-1.5">
+          <span class="font-sans text-[10px] font-semibold tracking-[0.12em] uppercase text-gold">{t('submit.name')}</span>
+          <input type="text" name="name" required
+                 class="bg-transparent border-0 border-b border-paper/30 py-2 font-serif text-[15px] text-paper focus:outline-none focus:border-gold transition" />
+        </label>
+        <label class="flex flex-col gap-1.5">
+          <span class="font-sans text-[10px] font-semibold tracking-[0.12em] uppercase text-gold">{t('submit.email')}</span>
+          <input type="email" name="email" required
+                 class="bg-transparent border-0 border-b border-paper/30 py-2 font-serif text-[15px] text-paper focus:outline-none focus:border-gold transition" />
+        </label>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label class="flex flex-col gap-1.5">
+          <span class="font-sans text-[10px] font-semibold tracking-[0.12em] uppercase text-gold">{t('submit.columnTitle')}</span>
+          <input type="text" name="title" required
+                 class="bg-transparent border-0 border-b border-paper/30 py-2 font-serif text-[15px] text-paper focus:outline-none focus:border-gold transition" />
+        </label>
+        <label class="flex flex-col gap-1.5">
+          <span class="font-sans text-[10px] font-semibold tracking-[0.12em] uppercase text-gold">{t('submit.section')}</span>
+          <select name="section" required
+                  class="bg-transparent border-0 border-b border-paper/30 py-2 font-serif text-[15px] text-paper focus:outline-none focus:border-gold transition">
+            <option value="" class="bg-ink">—</option>
+            <option value="politica" class="bg-ink">{lang === 'es' ? 'Política' : 'Politics'}</option>
+            <option value="economia" class="bg-ink">{lang === 'es' ? 'Economía' : 'Economy'}</option>
+            <option value="tecnologia" class="bg-ink">{lang === 'es' ? 'Tecnología' : 'Technology'}</option>
+            <option value="cultura" class="bg-ink">{lang === 'es' ? 'Cultura' : 'Culture'}</option>
+            <option value="sociedad" class="bg-ink">{lang === 'es' ? 'Sociedad' : 'Society'}</option>
+            <option value="medioambiente" class="bg-ink">{lang === 'es' ? 'Medio ambiente' : 'Environment'}</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="flex flex-col gap-1.5">
+        <span class="font-sans text-[10px] font-semibold tracking-[0.12em] uppercase text-gold">{t('submit.bio')}</span>
+        <input type="text" name="bio" maxlength="280" required
+               class="bg-transparent border-0 border-b border-paper/30 py-2 font-serif text-[15px] text-paper focus:outline-none focus:border-gold transition" />
+        <span class="font-sans text-[10px] opacity-55 tracking-[0.05em]">{t('submit.bioHint')}</span>
+      </label>
+
+      <label class="flex flex-col gap-1.5">
+        <span class="font-sans text-[10px] font-semibold tracking-[0.12em] uppercase text-gold">{t('submit.body_field')}</span>
+        <textarea name="body" id="bodyText" minlength="200" required
+                  class="bg-transparent border-0 border-b border-paper/30 py-2 font-serif text-[15px] leading-[1.5] text-paper focus:outline-none focus:border-gold transition resize-y min-h-[120px]"></textarea>
+        <div id="wordCount" class="font-mono text-[10px] text-gold opacity-70 text-right">0 {t('submit.words')}</div>
+      </label>
+
+      <!-- Honeypot -->
+      <input type="text" name="website" style="position:absolute;left:-9999px" tabindex="-1" autocomplete="off" />
+
+      <button type="submit"
+              class="bg-gold text-ink border-0 px-6 py-3.5 font-sans text-[12px] font-bold tracking-[0.18em] uppercase cursor-pointer rounded-sm transition hover:bg-paper hover:-translate-y-0.5 justify-self-start disabled:opacity-50">
+        {t('submit.button')}
+      </button>
+
+      <div id="submitSuccess" class="hidden fade-in p-5 mt-4 border-l-4 border-gold bg-gold/10 text-[14px] leading-[1.5]">
+        <strong>{t('submit.success.title')}</strong><br />
+        <span>{t('submit.success.body')}</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const wordsLabel = document.documentElement.lang === 'en' ? 'words' : 'palabras';
+  const body = document.getElementById('bodyText') as HTMLTextAreaElement;
+  const counter = document.getElementById('wordCount')!;
+  body?.addEventListener('input', () => {
+    const n = body.value.trim().split(/\s+/).filter(Boolean).length;
+    counter.textContent = `${n} ${wordsLabel}`;
+    counter.style.color = n >= 600 && n <= 1500 ? 'var(--gold)' : 'rgba(245,241,232,0.4)';
+  });
+
+  // @ts-ignore
+  const ENDPOINT = import.meta.env.PUBLIC_SUBMIT_ENDPOINT;
+
+  const form = document.getElementById('columnForm') as HTMLFormElement;
+  const success = document.getElementById('submitSuccess')!;
+  const btn = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if ((form.elements.namedItem('website') as HTMLInputElement).value) return; // honeypot
+    btn.disabled = true;
+    const payload = Object.fromEntries(new FormData(form).entries());
+    payload['lang'] = document.documentElement.lang;
+
+    try {
+      if (ENDPOINT) {
+        const r = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!r.ok) throw new Error('Server error');
+      } else {
+        console.log('PUBLIC_SUBMIT_ENDPOINT no configurado. Payload:', payload);
+      }
+      success.classList.add('show');
+      success.classList.remove('hidden');
+      form.reset();
+      counter.textContent = `0 ${wordsLabel}`;
+      setTimeout(() => {
+        success.classList.remove('show');
+        success.classList.add('hidden');
+        btn.disabled = false;
+      }, 8000);
+    } catch (err) {
+      alert(document.documentElement.lang === 'en'
+        ? 'Submission failed. Please try again.'
+        : 'El envío falló. Intenta de nuevo.');
+      btn.disabled = false;
+    }
+  });
+</script>

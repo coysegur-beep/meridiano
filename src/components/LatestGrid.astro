@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '@i18n/ui';
+import { useTranslations, localePath } from '@i18n/utils';
+
+interface Props { lang: Lang; items: CollectionEntry<'news'>[]; }
+const { lang, items } = Astro.props;
+const t = useTranslations(lang);
+const today = new Date().toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US');
+
+const sectionLabel = (key: string) => {
+  const map: Record<string, { es: string; en: string }> = {
+    mundo: { es: 'Mundo', en: 'World' },
+    economia: { es: 'Economía', en: 'Economy' },
+    politica: { es: 'Política', en: 'Politics' },
+    cultura: { es: 'Cultura', en: 'Culture' },
+    tecnologia: { es: 'Tecnología', en: 'Technology' },
+    ciencia: { es: 'Ciencia', en: 'Science' },
+    deportes: { es: 'Deportes', en: 'Sports' },
+    negocios: { es: 'Negocios', en: 'Business' },
+    salud: { es: 'Salud', en: 'Health' },
+    medioambiente: { es: 'Medio ambiente', en: 'Environment' },
+  };
+  return map[key]?.[lang] || key;
+};
+---
+<section class="max-w-container mx-auto px-6 py-10 relative z-[2]">
+  <div class="flex items-center gap-4.5 mb-7 border-t-2 border-ink pt-3" style="gap: 18px;">
+    <h2 class="font-display font-black text-3xl tracking-[-0.02em]" style="font-variation-settings: 'opsz' 144;">
+      {t('latest.title')}
+    </h2>
+    <span class="font-sans text-[11px] tracking-[0.15em] uppercase text-ink/80 px-2.5 py-1 border border-ink/80 rounded-sm">
+      {today}
+    </span>
+    <span class="flex-1 h-px bg-rule"></span>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {items.map(n => (
+      <a href={localePath(lang, `/${n.data.section}/${n.id.replace(/\.(md|mdx)$/, '')}`)}
+         class="block group">
+        <div class="aspect-[4/3] bg-cover bg-center rounded-sm mb-3 transition group-hover:brightness-105"
+             style={`background-image: url('${n.data.heroImage || 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80'}')`}></div>
+        <div class="font-sans text-[10px] font-bold tracking-[0.12em] uppercase text-red mb-1">
+          {sectionLabel(n.data.section)}
+        </div>
+        <h4 class="font-display font-medium text-[17px] leading-[1.18] tracking-[-0.01em] mb-1.5"
+            style="font-variation-settings: 'opsz' 40;">
+          {n.data.title}
+        </h4>
+        <div class="font-sans text-[10px] tracking-[0.08em] uppercase text-ink/70 mt-2">
+          {n.data.source !== 'original' ? n.data.source.toUpperCase() : `${t('by')} ${n.data.author}`}
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import type { Lang } from '@i18n/ui';
+import { useTranslations, localePath } from '@i18n/utils';
+
+interface Props { lang: Lang; current?: string; }
+const { lang, current = 'home' } = Astro.props;
+const t = useTranslations(lang);
+
+const items = [
+  { key: 'home',      label: t('nav.home'),      href: '/' },
+  { key: 'world',     label: t('nav.world'),     href: '/mundo' },
+  { key: 'economy',   label: t('nav.economy'),   href: '/economia', live: true },
+  { key: 'politics',  label: t('nav.politics'),  href: '/politica' },
+  { key: 'opinion',   label: t('nav.opinion'),   href: '/opinion' },
+  { key: 'culture',   label: t('nav.culture'),   href: '/cultura' },
+  { key: 'tech',      label: t('nav.tech'),      href: '/tecnologia' },
+  { key: 'science',   label: t('nav.science'),   href: '/ciencia' },
+  { key: 'sports',    label: t('nav.sports'),    href: '/deportes' },
+  { key: 'lifestyle', label: t('nav.lifestyle'), href: '/estilo' },
+  { key: 'podcasts',  label: t('nav.podcasts'),  href: '/podcasts' },
+  { key: 'video',     label: t('nav.video'),     href: '/video' },
+];
+---
+<nav aria-label="Secciones" class="sticky top-0 z-50 bg-paper-light/95 backdrop-blur border-b border-rule">
+  <div class="max-w-container mx-auto px-6 flex gap-0.5 overflow-x-auto no-scrollbar">
+    {items.map(item => (
+      <a href={localePath(lang, item.href)}
+         class={`relative font-sans text-[13px] font-medium tracking-[0.04em] uppercase whitespace-nowrap py-3.5 px-4 transition hover:text-red
+           ${current === item.key ? 'text-red font-bold' : 'text-ink'}
+           ${item.live ? 'live-dot' : ''}`}>
+        {item.label}
+        {current === item.key && (
+          <span class="absolute left-4 right-4 bottom-0 h-[3px] bg-red"></span>
+        )}
+      </a>
+    ))}
+  </div>
+</nav>

@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '@i18n/ui';
+import { useTranslations, localePath } from '@i18n/utils';
+
+interface Props {
+  lang: Lang;
+  featured: CollectionEntry<'news'>;
+  side: CollectionEntry<'news'>[];
+}
+const { lang, featured, side } = Astro.props;
+const t = useTranslations(lang);
+
+const sectionLabel = (key: string) => {
+  const map: Record<string, { es: string; en: string }> = {
+    mundo: { es: 'Mundo', en: 'World' },
+    economia: { es: 'Economía', en: 'Economy' },
+    politica: { es: 'Política', en: 'Politics' },
+    cultura: { es: 'Cultura', en: 'Culture' },
+    tecnologia: { es: 'Tecnología', en: 'Technology' },
+    ciencia: { es: 'Ciencia', en: 'Science' },
+    opinion: { es: 'Opinión', en: 'Opinion' },
+    deportes: { es: 'Deportes', en: 'Sports' },
+    negocios: { es: 'Negocios', en: 'Business' },
+    salud: { es: 'Salud', en: 'Health' },
+    medioambiente: { es: 'Medio ambiente', en: 'Environment' },
+    estilo: { es: 'Estilo', en: 'Lifestyle' },
+  };
+  return map[key]?.[lang] || key;
+};
+
+const href = (entry: CollectionEntry<'news'>) =>
+  localePath(lang, `/${entry.data.section}/${entry.id.replace(/\.(md|mdx)$/, '')}`);
+---
+<section class="max-w-container mx-auto px-6 py-10 relative z-[2]">
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 border-b border-rule pb-10">
+    <article class="relative">
+      <a href={href(featured)} class="block group">
+        <div class="aspect-[16/10] rounded-sm relative overflow-hidden bg-cover bg-center"
+             style={`background-image: linear-gradient(135deg, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.1) 50%, rgba(200,16,46,0.3) 100%), url('${featured.data.heroImage || 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1600&q=80'}')`}>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent"></div>
+          <div class="absolute bottom-7 left-7 right-7 text-paper z-[2]">
+            <span class="inline-block font-sans text-[10px] font-bold tracking-[0.18em] uppercase bg-red text-paper px-2.5 py-1 rounded-sm mb-3.5">
+              {sectionLabel(featured.data.section)}
+            </span>
+            <h2 class="font-display font-bold leading-[1.02] tracking-[-0.025em] text-[clamp(30px,4.5vw,54px)] mb-3 text-paper"
+                style="font-variation-settings: 'opsz' 100;">
+              {featured.data.title}
+            </h2>
+            {featured.data.deck && (
+              <p class="font-serif text-[17px] leading-[1.45] opacity-90 max-w-[620px]">{featured.data.deck}</p>
+            )}
+            <div class="mt-4 font-sans text-[11px] tracking-[0.08em] uppercase opacity-75">
+              {t('by')} {featured.data.author}
+            </div>
+          </div>
+        </div>
+      </a>
+    </article>
+
+    <aside class="grid gap-7 content-start">
+      {side.map((s, i) => (
+        <>
+          <article class="group cursor-pointer">
+            <a href={href(s)} class="block">
+              <div class="font-sans text-[10px] font-bold tracking-[0.15em] uppercase text-red mb-0.5">
+                {sectionLabel(s.data.section)}
+              </div>
+              <h3 class="font-display font-medium text-[22px] leading-[1.15] tracking-[-0.015em] my-2 text-ink group-hover:text-red transition"
+                  style="font-variation-settings: 'opsz' 60;">
+                {s.data.title}
+              </h3>
+              {s.data.deck && <p class="text-[14px] text-ink/80 leading-[1.45]">{s.data.deck}</p>}
+              <div class="mt-2.5 font-sans text-[11px] tracking-[0.08em] uppercase text-ink/70">
+                {s.data.source !== 'original' ? s.data.source.toUpperCase() : `${t('by')} ${s.data.author}`}
+              </div>
+            </a>
+          </article>
+          {i < side.length - 1 && <hr class="border-0 h-px bg-rule" />}
+        </>
+      ))}
+    </aside>
+  </div>
+</section>

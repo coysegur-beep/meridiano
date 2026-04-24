@@ -1,0 +1,39 @@
+name: Fetch agency wires
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # cada 15 minutos
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install XML parser
+        run: npm i fast-xml-parser --no-save
+
+      - name: Fetch wires
+        env:
+          AGENCY_API_KEY: ${{ secrets.AGENCY_API_KEY }}
+        run: node scripts/fetch-wires.mjs
+
+      - name: Commit new wires
+        run: |
+          git config user.name "meridiano-wire-bot"
+          git config user.email "wire-bot@meridiano.example"
+          if [ -n "$(git status --porcelain src/content/wires)" ]; then
+            git add src/content/wires
+            git commit -m "feat(wires): nueva ingesta $(date -u +'%Y-%m-%dT%H:%MZ')"
+            git push
+          else
+            echo "Sin wires nuevos."
+          fi

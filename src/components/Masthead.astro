@@ -1,0 +1,40 @@
+---
+import type { Lang } from '@i18n/ui';
+import { useTranslations, localePath } from '@i18n/utils';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<header class="double-rule bg-paper-light relative z-[5] px-6 pt-8 pb-6">
+  <div class="max-w-container mx-auto grid grid-cols-1 lg:grid-cols-3 items-center gap-5">
+    <div class="font-sans text-[11px] tracking-[0.1em] uppercase text-ink/80 text-center lg:text-left">
+      <div>{t('site.edition')} · Nº 1,247</div>
+      <div class="opacity-70 mt-1">{t('site.year')}</div>
+    </div>
+
+    <div class="text-center">
+      <h1 class="font-display font-black leading-[0.9] tracking-[-0.04em] text-[clamp(44px,8vw,88px)]"
+          style="font-variation-settings: 'opsz' 144;">
+        <a href={localePath(lang, '/')} class="logo-mark no-underline text-ink">MERIDIANO</a>
+      </h1>
+      <div class="font-serif italic text-[13px] text-ink/70 mt-5 tracking-[0.02em]">{t('site.tagline')}</div>
+    </div>
+
+    <div class="flex items-center justify-center lg:justify-end gap-3.5">
+      <form role="search" action={localePath(lang, '/buscar')} method="get" class="relative">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="search" name="q"
+               placeholder={t('cta.search')}
+               aria-label={t('cta.search')}
+               class="bg-transparent border border-rule rounded-full py-2 pl-10 pr-4 font-sans text-[13px] w-48 focus:w-60 focus:border-ink focus:outline-none transition-all placeholder:text-ink/50" />
+      </form>
+      <button class="bg-ink text-paper border-0 px-3.5 py-2 font-sans text-[11px] font-semibold tracking-[0.12em] uppercase cursor-pointer rounded-sm hover:bg-red transition" aria-label={t('cta.menu')}>
+        {t('cta.menu')}
+      </button>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '@i18n/ui';
+import { useTranslations, localePath } from '@i18n/utils';
+
+interface Props { lang: Lang; columns: CollectionEntry<'opinion'>[]; }
+const { lang, columns } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="max-w-container mx-auto px-6 py-10 relative z-[2]">
+  <div class="flex items-center gap-4.5 mb-7 border-t-2 border-ink pt-3" style="gap: 18px;">
+    <h2 class="font-display font-black text-3xl tracking-[-0.02em]" style="font-variation-settings: 'opsz' 144;">
+      {t('opinion.title')}
+    </h2>
+    <span class="font-sans text-[11px] tracking-[0.15em] uppercase text-ink/80 px-2.5 py-1 border border-ink/80 rounded-sm">
+      {t('opinion.subtitle')}
+    </span>
+    <span class="flex-1 h-px bg-rule"></span>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    {columns.slice(0, 3).map(c => (
+      <a href={localePath(lang, `/opinion/${c.id.replace(/\.(md|mdx)$/, '')}`)}
+         class="flex gap-4 p-5 bg-paper-light border border-rule rounded-sm transition hover:border-ink hover:shadow-md group">
+        <div class="shrink-0 w-18 h-18 rounded-full bg-cover bg-center border-2 border-paper"
+             style={`width: 72px; height: 72px; box-shadow: 0 0 0 1px var(--rule); background-image: url('${c.data.heroImage || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80'}')`}></div>
+        <div>
+          <div class="font-sans text-[10px] font-bold tracking-[0.15em] uppercase text-gold mb-1">
+            {c.data.section.toUpperCase()}
+          </div>
+          <h4 class="font-display font-medium text-[18px] leading-[1.2] mb-2 group-hover:text-red transition"
+              style="font-variation-settings: 'opsz' 60;">
+            {c.data.title}
+          </h4>
+          <div class="font-sans text-[12px] font-semibold text-ink/80 italic">{c.data.author}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import TopBar from '@components/TopBar.astro';
+import Ticker from '@components/Ticker.astro';
+import Masthead from '@components/Masthead.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+
+export async function getStaticPaths() {
+  const news = await getCollection('news', ({ data }) => !data.draft && data.lang === 'es');
+  const opinion = await getCollection('opinion', ({ data }) => !data.draft && data.approved && data.lang === 'es');
+
+  return [...news, ...opinion].map(entry => ({
+    params: {
+      section: entry.data.section,
+      slug: entry.id.replace(/\.(md|mdx)$/, ''),
+    },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const lang = 'es';
+---
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.deck || entry.data.title}
+  lang={lang}
+  type="article"
+  ogImage={entry.data.heroImage}
+  publishedTime={entry.data.pubDate.toISOString()}
+  modifiedTime={entry.data.updatedDate?.toISOString()}
+  author={entry.data.author}
+>
+  <TopBar lang={lang} />
+  <Ticker lang={lang} />
+  <Masthead lang={lang} />
+  <Nav lang={lang} />
+
+  <article class="max-w-[780px] mx-auto px-6 py-12 relative z-[2]">
+    <div class="font-sans text-[11px] font-bold tracking-[0.18em] uppercase text-red mb-4">
+      {entry.data.section}
+    </div>
+    <h1 class="font-display font-bold text-[clamp(32px,5vw,56px)] leading-[1.02] tracking-[-0.025em] mb-6"
+        style="font-variation-settings: 'opsz' 144;">
+      {entry.data.title}
+    </h1>
+    {entry.data.deck && (
+      <p class="font-serif text-[20px] leading-[1.5] text-ink/80 mb-8 max-w-[660px]">{entry.data.deck}</p>
+    )}
+    <div class="flex items-center gap-4 font-sans text-[12px] tracking-[0.08em] uppercase text-ink/70 mb-8 pb-6 border-b border-rule">
+      <span>Por {entry.data.author}</span>
+      <span>·</span>
+      <time datetime={entry.data.pubDate.toISOString()}>
+        {entry.data.pubDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </time>
+      {entry.data.source !== 'original' && <><span>·</span><span class="text-red">{entry.data.source.toUpperCase()}</span></>}
+    </div>
+    {entry.data.heroImage && (
+      <img src={entry.data.heroImage} alt={entry.data.heroAlt || entry.data.title}
+           class="w-full aspect-[16/9] object-cover rounded-sm mb-8" loading="eager" />
+    )}
+    <div class="prose prose-lg max-w-none font-serif text-[19px] leading-[1.7] text-ink
+                prose-headings:font-display prose-headings:text-ink
+                prose-a:text-red prose-a:no-underline hover:prose-a:underline
+                prose-strong:text-ink prose-strong:font-semibold">
+      <Content />
+    </div>
+  </article>
+
+  <Footer lang={lang} />
+</BaseLayout>
