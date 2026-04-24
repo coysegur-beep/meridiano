@@ -1,0 +1,13 @@
+{
+  "name": "Meridiano",
+  "short_name": "Meridiano",
+  "description": "Noticias globales, análisis económico y columnas de opinión.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F1E8",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

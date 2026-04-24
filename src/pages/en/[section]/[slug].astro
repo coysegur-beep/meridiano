@@ -23,6 +23,17 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const lang = 'en';
+
+const SITE = Astro.site?.toString().replace(/\/$/, '') || '';
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/en` },
+    { '@type': 'ListItem', position: 2, name: entry.data.section, item: `${SITE}/en/${entry.data.section}` },
+    { '@type': 'ListItem', position: 3, name: entry.data.title, item: `${SITE}/en/${entry.data.section}/${entry.id.replace(/\.(md|mdx)$/, '')}` },
+  ],
+};
 ---
 <BaseLayout
   title={entry.data.title}
@@ -34,6 +45,7 @@ const lang = 'en';
   modifiedTime={entry.data.updatedDate?.toISOString()}
   author={entry.data.author}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   <TopBar lang={lang} />
   <Ticker lang={lang} />
   <Masthead lang={lang} />

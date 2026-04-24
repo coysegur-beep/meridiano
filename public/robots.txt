@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dwliapwuypdk5.cloudfront.net/sitemap-index.xml

@@ -37,13 +37,35 @@ const t = useTranslations(lang);
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'NewsMediaOrganization',
+  '@id': `${SITE}/#organization`,
   name: 'Meridiano',
   url: SITE,
-  logo: `${SITE}/logo.png`,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE}/logo.png`,
+    width: 512,
+    height: 512,
+  },
   sameAs: [
     'https://twitter.com/meridiano',
     'https://facebook.com/meridiano',
   ],
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${SITE}/#website`,
+  url: SITE,
+  name: 'Meridiano',
+  description,
+  publisher: { '@id': `${SITE}/#organization` },
+  inLanguage: lang === 'es' ? 'es-CO' : 'en-US',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: `${SITE}/buscar?q={search_term_string}` },
+    'query-input': 'required name=search_term_string',
+  },
 };
 
 const articleSchema = type === 'article' ? {
@@ -62,6 +84,8 @@ const articleSchema = type === 'article' ? {
   },
   mainEntityOfPage: { '@type': 'WebPage', '@id': currentUrl },
   inLanguage: lang,
+  isAccessibleForFree: true,
+  isPartOf: { '@id': `${SITE}/#website` },
 } : null;
 ---
 <!DOCTYPE html>
@@ -70,6 +94,7 @@ const articleSchema = type === 'article' ? {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content={Astro.generator} />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={currentUrl} />
@@ -110,10 +135,16 @@ const articleSchema = type === 'article' ? {
 
   <!-- Schema.org -->
   <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
   {articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <slot name="head" />
 </head>
 <body class="relative">
   <slot />
