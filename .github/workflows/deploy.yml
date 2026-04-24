@@ -68,8 +68,7 @@ jobs:
             --include "*.xml" \
             --include "robots.txt" \
             --include "llms.txt" \
-            --cache-control "public, max-age=300, s-maxage=3600" \
-            --content-type-by-extension
+            --cache-control "public, max-age=300, s-maxage=3600"
 
       - name: Invalidate CloudFront cache
         run: |
