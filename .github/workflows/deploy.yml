@@ -13,9 +13,9 @@ env:
   NODE_VERSION: '20'
   AWS_REGION: us-east-1
   # Ajusta a los IDs reales del stack de Meridiano (no los de atenasseguridadprivadaltda)
-  S3_BUCKET: meridiano.example
-  CLOUDFRONT_DISTRIBUTION_ID: XXXXXXXXXXXXXX
-  SITE_URL: https://meridiano.example
+  S3_BUCKET: meridiano-portal
+  CLOUDFRONT_DISTRIBUTION_ID: EF3W2M3T6B0ZO
+  SITE_URL: https://dwliapwuypdk5.cloudfront.net
 
 jobs:
   build-deploy:
