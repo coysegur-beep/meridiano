@@ -22,7 +22,7 @@ const otherHref = localePath(other, Astro.url.pathname.replace(/^\/en/, '') || '
         <a href={localePath('en', Astro.url.pathname.replace(/^\/en/, '') || '/')}
            class={`px-2.5 py-1 transition ${lang === 'en' ? 'bg-paper text-ink' : ''}`}>EN</a>
       </div>
-      <a href={localePath(lang, '/enviar-columna')}
+      <a href={`${localePath(lang, '/')}#colabora`}
          class="text-gold border border-gold px-3 py-1 rounded-sm hover:bg-gold hover:text-ink transition font-semibold">
         {t('cta.submit')}
       </a>

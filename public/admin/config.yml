@@ -3,9 +3,9 @@
 
 backend:
   name: github
-  repo: coysegur-beep/atlas    # <-- Cambia por el repo real de Meridiano
+  repo: coysegur-beep/meridiano
   branch: main
-  base_url: https://api.netlify.com   # Opción: usa oauth.decapbridge.com o tu propio OAuth proxy en Lambda
+  base_url: https://decapbridge.com
   auth_endpoint: auth
 
 # Flujo editorial: las ediciones crean PRs, no empujan directo a main
