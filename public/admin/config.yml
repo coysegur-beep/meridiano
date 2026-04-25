@@ -67,7 +67,7 @@ collections:
           - { label: 'EFE', value: efe }
         default: original
         i18n: duplicate
-      - { label: 'Etiquetas', name: tags, widget: list, default: [], i18n: duplicate }
+      - { label: 'Etiquetas', name: tags, widget: list, default: [], i18n: true }
       - { label: 'Cuerpo', name: body, widget: markdown, i18n: true }
 
   - name: opinion
