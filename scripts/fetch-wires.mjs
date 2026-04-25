@@ -24,7 +24,7 @@ const MAX_AGE_DAYS = 3; // limpia wires viejos para no explotar el repo
 const FEEDS = [
   // AFP, AP y Reuters ofrecen feeds por contrato — esta es la estructura típica.
   // Mientras tanto, demos con feeds públicos:
-  { url: 'https://feeds.bbci.co.uk/news/world/rss.xml',            source: 'original', lang: 'en', section: 'mundo' },
+  { url: 'https://feeds.bbci.co.uk/news/world/rss.xml',            source: 'original', lang: 'en', section: 'internacional' },
   { url: 'https://www.eleconomista.es/rss/rss-economia.php',       source: 'original', lang: 'es', section: 'economia' },
 ];
 
