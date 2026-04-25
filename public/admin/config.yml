@@ -41,16 +41,16 @@ collections:
         name: section
         widget: select
         options:
-          - { label: 'Mundo', value: mundo }
+          - { label: 'Colombia', value: colombia }
+          - { label: 'General', value: general }
           - { label: 'Economía', value: economia }
           - { label: 'Política', value: politica }
           - { label: 'Cultura', value: cultura }
-          - { label: 'Tecnología', value: tecnologia }
-          - { label: 'Ciencia', value: ciencia }
+          - { label: 'Tendencias', value: tendencias }
+          - { label: 'Opinión', value: opinion }
+          - { label: 'Internacional', value: internacional }
           - { label: 'Deportes', value: deportes }
-          - { label: 'Negocios', value: negocios }
-          - { label: 'Salud', value: salud }
-          - { label: 'Medio ambiente', value: medioambiente }
+          - { label: 'Entretenimiento', value: entretenimiento }
         i18n: duplicate
       - { label: 'Imagen principal', name: heroImage, widget: image, required: false, i18n: duplicate }
       - { label: 'Texto alternativo imagen', name: heroAlt, widget: string, required: false, i18n: true }

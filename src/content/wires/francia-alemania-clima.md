@@ -3,7 +3,7 @@ title: "Francia y Alemania acuerdan una fuerza europea de respuesta climática"
 deck: "El anuncio llegó tras la reunión bilateral del Elíseo y compromete €8.500 millones iniciales."
 pubDate: 2026-04-24T10:42:00Z
 author: "AFP"
-section: mundo
+section: internacional
 lang: es
 source: afp
 externalId: "afp-2026-04-24-XX123"

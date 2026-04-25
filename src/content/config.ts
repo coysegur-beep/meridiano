@@ -10,9 +10,8 @@ const articleSchema = z.object({
   author: z.string(),
   authorBio: z.string().optional(),
   section: z.enum([
-    'mundo', 'economia', 'politica', 'opinion', 'cultura',
-    'tecnologia', 'ciencia', 'deportes', 'estilo', 'salud',
-    'medioambiente', 'negocios',
+    'colombia', 'general', 'economia', 'politica', 'cultura',
+    'tendencias', 'opinion', 'internacional', 'deportes', 'entretenimiento',
   ]),
   heroImage: z.string().optional(),
   heroAlt: z.string().optional(),

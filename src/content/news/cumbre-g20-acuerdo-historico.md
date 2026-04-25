@@ -4,7 +4,7 @@ deck: "Los líderes de las 20 principales economías firmaron un marco común de
 pubDate: 2026-04-24T14:30:00Z
 author: "Isabel Navarro"
 authorBio: "Corresponsal internacional. Columna de economía política los jueves."
-section: mundo
+section: internacional
 lang: es
 featured: true
 heroImage: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1600&q=80"
