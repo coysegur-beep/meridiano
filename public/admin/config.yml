@@ -59,7 +59,12 @@ collections:
       - label: 'Fuente'
         name: source
         widget: select
-        options: [original, afp, ap, reuters, efe]
+        options:
+          - { label: 'Original', value: original }
+          - { label: 'AFP', value: afp }
+          - { label: 'AP', value: ap }
+          - { label: 'Reuters', value: reuters }
+          - { label: 'EFE', value: efe }
         default: original
         i18n: duplicate
       - { label: 'Etiquetas', name: tags, widget: list, default: [], i18n: duplicate }
