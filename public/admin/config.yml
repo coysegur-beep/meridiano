@@ -1,20 +1,28 @@
 # Decap CMS — panel editorial para Meridiano
-# Se accede en /admin con autenticación GitHub OAuth.
-
 backend:
-  name: github
+  name: git-gateway
   repo: coysegur-beep/meridiano
   branch: main
-  base_url: https://decapbridge.com
-  auth_endpoint: auth
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/fddaa2a5-077f-4e21-b552-9d77226214de/pkce
+  auth_token_endpoint: /sites/fddaa2a5-077f-4e21-b552-9d77226214de/token
+  gateway_url: https://gateway.decapbridge.com
+  commit_messages:
+    create: 'Create {{collection}} "{{slug}}" via DecapBridge'
+    update: 'Update {{collection}} "{{slug}}" via DecapBridge'
+    delete: 'Delete {{collection}} "{{slug}}" via DecapBridge'
+    uploadMedia: 'Upload "{{path}}" via DecapBridge'
+    deleteMedia: 'Delete "{{path}}" via DecapBridge'
 
-# Flujo editorial: las ediciones crean PRs, no empujan directo a main
+logo_url: https://decapbridge.com/decapcms-with-bridge.svg
+site_url: https://elmeridiano.net
+
 publish_mode: editorial_workflow
 
 media_folder: public/uploads
 public_folder: /uploads
 
-# Localización del UI (ES)
 locale: es
 
 i18n:
