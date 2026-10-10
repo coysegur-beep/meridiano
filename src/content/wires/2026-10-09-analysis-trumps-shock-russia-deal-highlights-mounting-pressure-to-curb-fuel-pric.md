@@ -1,0 +1,18 @@
+---
+title: "Analysis: Trump's shock Russia deal highlights mounting pressure to curb fuel prices"
+deck: "The US president hopes to ease his party's pain before next month's midterm elections, writes the BBC's North America correspondent."
+pubDate: 2026-10-09T22:30:22.000Z
+author: "ORIGINAL"
+section: "internacional"
+lang: "en"
+source: "original"
+externalId: "https://www.bbc.co.uk/news/articles/c5lye9z4xw4yo?at_medium=RSS&at_campaign=rss"
+wireTimestamp: "2026-10-09T22:30:22.000Z"
+draft: false
+featured: false
+tags: []
+---
+
+The US president hopes to ease his party's pain before next month's midterm elections, writes the BBC's North America correspondent.
+
+[Fuente original](https://www.bbc.co.uk/news/articles/c5lye9z4xw4yo?at_medium=RSS&at_campaign=rss)
