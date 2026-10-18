@@ -1,0 +1,18 @@
+---
+title: "Violent clashes, looting and buildings ablaze in France as over 1,200 arrested after protests"
+deck: "Disorder broke out in cities across the country on a day in which more than half a million joined cost of living protests."
+pubDate: 2026-10-18T05:56:20.000Z
+author: "ORIGINAL"
+section: "internacional"
+lang: "en"
+source: "original"
+externalId: "https://www.bbc.co.uk/news/articles/c6d937wedj7jo?at_medium=RSS&at_campaign=rss"
+wireTimestamp: "2026-10-18T05:56:20.000Z"
+draft: false
+featured: false
+tags: []
+---
+
+Disorder broke out in cities across the country on a day in which more than half a million joined cost of living protests.
+
+[Fuente original](https://www.bbc.co.uk/news/articles/c6d937wedj7jo?at_medium=RSS&at_campaign=rss)
